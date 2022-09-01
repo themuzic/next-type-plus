@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import VideoSlider from "components/VideoSlider";
 import { Company, Movie, Genre, Video } from "pages";
 
-export default function Detail():JSX.Element {
+export default function Detail(): JSX.Element {
   // const VideoSliderNoSSR = dynamic(() => import("components/VideoSlider"), {
   //   ssr: false,
   // });

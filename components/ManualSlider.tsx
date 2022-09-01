@@ -110,7 +110,7 @@ const ManualSlider = ({ dv, type }: SliderProps) => {
         {status === "success" ? (
           <Slider {...settings}>
             {data.map(
-              (obj) =>
+              (obj: Content) =>
                 obj.poster_path !== null && (
                   <div
                     className="movie_wrap"

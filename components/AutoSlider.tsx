@@ -61,7 +61,10 @@ const AutoSlider = ({ dv, type }: SliderProps) => {
       e.stopPropagation();
       return;
     } else {
-      const classes = e.target.parentElement.parentElement.classList;
+      const eventTarget = e.target as HTMLElement;
+      const parentElement = eventTarget.parentElement as HTMLDivElement;
+      const targetElement = parentElement.parentElement as HTMLDivElement;
+      const classes = targetElement.classList;
       if (classes.contains("slick-active")) {
         let title;
         if (dv === "movies") {
@@ -79,7 +82,7 @@ const AutoSlider = ({ dv, type }: SliderProps) => {
       <div className="slider_wrap">
         {status === "success" ? (
           <Slider {...settings}>
-            {data.map((obj) => (
+            {data.map((obj: Content) => (
               <div
                 className="movie_wrap"
                 key={obj.id}
