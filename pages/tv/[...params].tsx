@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import VideoSlider from "components/VideoSlider";
 import { Company, Tv, Genre, Video } from "pages";
 
-export default function Detail():JSX.Element {
+export default function Detail(): JSX.Element {
   // const VideoSliderNoSSR = dynamic(() => import("components/VideoSlider"), {
   //   ssr: false,
   // });
@@ -23,17 +23,14 @@ export default function Detail():JSX.Element {
         (async () => {
           const response = await (await fetch(`/api/tv/${param[1]}`)).json();
           setTv(response);
-          // console.log("tv: ", response);
           if (response.production_companies)
             setCompany(response.production_companies[0]);
-          // console.log("company: ", company);
         })();
         (async () => {
           const { results } = await (
             await fetch(`/api/tv/${param[1]}/videos`)
           ).json();
           setVideos(results);
-          // console.log("video: ", results);
         })();
       }
     }

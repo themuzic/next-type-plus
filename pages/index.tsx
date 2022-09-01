@@ -20,7 +20,7 @@ export interface Movie {
   release_date: string;
   runtime: string;
   overview: string;
-  genres: Array<Genre> | undefined;
+  genres: Array<Genre>;
 }
 export interface Tv {
   id: string;

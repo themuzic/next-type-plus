@@ -25,16 +25,13 @@ export default function Detail(): JSX.Element {
             await fetch(`/api/movies/${param[1]}`)
           ).json();
           setMovie(response);
-          // console.log("movie: ", response);
           setCompany(response.production_companies[0]);
-          //console.log("company: ", company);
         })();
         (async () => {
           const { results } = await (
             await fetch(`/api/movies/${param[1]}/videos`)
           ).json();
           setVideos(results);
-          //console.log("video: ", results);
         })();
       }
     }
