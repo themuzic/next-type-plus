@@ -107,7 +107,7 @@ const AutoSlider = ({ dv, type }: SliderProps) => {
           .slider_bg {
             overflow-x: visible;
             overflow-y: visible;
-            padding: 50px 0 100px;
+            padding: 50px 0 80px;
             margin: 0 -15px;
           }
           .slider_wrap {
@@ -188,7 +188,25 @@ const AutoSlider = ({ dv, type }: SliderProps) => {
               transform: translateX(-4vw);
             }
           }
-          @media (max-width: 400px) {
+          @media (max-width: 1024px) {
+            .slider_bg {
+              padding: 35px 0 40px;
+            }
+            .slick-center .movie_wrap {
+              transform: scale(1.1, 1.1) translateZ(0px)
+                translate3d(0px, 0px, 0px);
+            }
+            .slick-active:hover .movie_wrap {
+              box-shadow: rgb(0 0 0/80%) 0px 15px 50px 10px,
+                rgb(0 0 0/72%) 0px 35px 22px -10px;
+              transform: scale(1.15, 1.15) translateZ(0px)
+                translate3d(0px, 0px, 0px);
+              transition-duration: 300ms;
+              transition-property: transform, box-shadow;
+              transition-timing-function: ease-out;
+            }
+          }
+          @media (max-width: 480px) {
             .slider_bg {
               padding: 40px 0 50px;
             }

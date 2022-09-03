@@ -131,7 +131,7 @@ const ManualSlider = ({ dv, type }: SliderProps) => {
           .slider_bg {
             overflow-x: visible;
             overflow-y: visible;
-            padding: 50px 0 100px;
+            padding: 50px 0 80px;
             margin: 0 -15px;
           }
           .slider_wrap {
@@ -222,7 +222,7 @@ const ManualSlider = ({ dv, type }: SliderProps) => {
           }
           @media (max-width: 1024px) {
             .slider_bg {
-              padding: 35px 0 65px;
+              padding: 35px 0 40px;
             }
           }
           @media (max-width: 640px) {
