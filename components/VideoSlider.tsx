@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import Slider from "react-slick";
 import YouTube from "react-youtube";
 import "node_modules/slick-carousel/slick/slick.css";
@@ -12,10 +12,9 @@ type SliderProps = {
 };
 
 const VideoSlider = ({ dv, id }: SliderProps) => {
-  const [size, setSize] = useState(0);
+  const [listSize, setListSize] = useState(0);
   const fetchList = async () => {
     const { results } = await (await fetch(`/api/${dv}/${id}/videos`)).json();
-    setSize(results.length);
     return results;
   };
   const { data, status }: UseQueryResult<Video[], Error> = useQuery(
@@ -25,6 +24,12 @@ const VideoSlider = ({ dv, id }: SliderProps) => {
       keepPreviousData: true,
     }
   );
+
+  useEffect(() => {
+    if (data) {
+      setListSize(data.length);
+    }
+  }, [data]);
 
   const [dragging, setDragging] = useState(false);
 
@@ -89,7 +94,7 @@ const VideoSlider = ({ dv, id }: SliderProps) => {
 
   return (
     <>
-      {size > 0 && <h2>Teaser</h2>}
+      {listSize > 0 && <h2>Teaser</h2>}
       <div className="slider_bg">
         <div className="slider_wrap">
           {status === "success" ? (

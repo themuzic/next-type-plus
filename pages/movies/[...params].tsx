@@ -21,12 +21,14 @@ export default function Detail(): JSX.Element {
       if (param) {
         setTitle(param[0]);
         setId(param[1]);
-        (async () => {
-          const response = await (await fetch(`/api/${dv}/${id}`)).json();
-          setMovie(response);
-          if (response.production_companies)
-            setCompany(response.production_companies[0]);
-        })();
+        if (id) {
+          (async () => {
+            const response = await (await fetch(`/api/${dv}/${id}`)).json();
+            setMovie(response);
+            if (response.production_companies)
+              setCompany(response.production_companies[0]);
+          })();
+        }
       }
     }
   }, [router.query.params, id]);
@@ -74,7 +76,7 @@ export default function Detail(): JSX.Element {
                         <span>{movie.runtime}분</span>
                       </>
                     )}
-                    {movie.genres && (
+                    {movie.genres && movie.genres.length > 0 && (
                       <>
                         <span>·</span>
                         {movie.genres.map((genre) => (

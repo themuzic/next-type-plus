@@ -21,12 +21,14 @@ export default function Detail(): JSX.Element {
       if (param) {
         setTitle(param[0]);
         setId(param[1]);
-        (async () => {
-          const response = await (await fetch(`/api/${dv}/${id}`)).json();
-          setTv(response);
-          if (response.production_companies)
-            setCompany(response.production_companies[0]);
-        })();
+        if (id) {
+          (async () => {
+            const response = await (await fetch(`/api/${dv}/${id}`)).json();
+            setTv(response);
+            if (response.production_companies)
+              setCompany(response.production_companies[0]);
+          })();
+        }
       }
     }
   }, [router.query.params, id]);
@@ -76,7 +78,7 @@ export default function Detail(): JSX.Element {
                         <span>시즌 {tv.number_of_seasons}</span>
                       </>
                     )}
-                    {tv.genres && (
+                    {tv.genres && tv.genres.length > 0 && (
                       <>
                         <span>·</span>
                         {tv.genres.map((genre) => (
