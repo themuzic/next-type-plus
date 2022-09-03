@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Slider from "react-slick";
 import YouTube from "react-youtube";
 import "node_modules/slick-carousel/slick/slick.css";

@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import Seo from "components/Seo";
 import dynamic from "next/dynamic";
 
