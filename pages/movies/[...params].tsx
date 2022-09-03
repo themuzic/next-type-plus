@@ -45,14 +45,17 @@ export default function Detail(): JSX.Element {
                 />
                 <div id="back_color"></div>
               </div>
-
               <div className="movie_section">
-                <div className="poster_wrap">
-                  <img
-                    src={`http://image.tmdb.org/t/p/w300${movie.poster_path}`}
-                    className="poster"
-                  />
-                </div>
+                {movie.poster_path && (
+                  <>
+                    <div className="poster_wrap">
+                      <img
+                        src={`http://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                        className="poster"
+                      />
+                    </div>
+                  </>
+                )}
                 <div className="info">
                   {company && company.logo_path && (
                     <img
@@ -62,23 +65,31 @@ export default function Detail(): JSX.Element {
                   )}
                   <h2 className="title">{movie.title}</h2>
                   <div className="genres">
-                    <span>
-                      {movie.release_date && movie.release_date.substring(0, 4)}
-                    </span>
-                    <span>·</span>
-                    <span>{movie.runtime}분</span>
-                    <span>·</span>
-                    {movie.genres &&
-                      movie.genres.map((genre) => (
-                        <span key={genre.id}>{genre.name}</span>
-                      ))}
+                    {movie.release_date && (
+                      <span>{movie.release_date.substring(0, 4)}</span>
+                    )}
+                    {movie.runtime && (
+                      <>
+                        <span>·</span>
+                        <span>{movie.runtime}분</span>
+                      </>
+                    )}
+                    {movie.genres && (
+                      <>
+                        <span>·</span>
+                        {movie.genres.map((genre) => (
+                          <span key={genre.id}>{genre.name}</span>
+                        ))}
+                      </>
+                    )}
                   </div>
-                  <div className="desc">{movie.overview}</div>
+                  {movie.overview && (
+                    <div className="desc">{movie.overview}</div>
+                  )}
                 </div>
               </div>
               {id && (
                 <div className="video_section">
-                  <h2>Teaser</h2>
                   <div>
                     <VideoSliderNoSSR dv={dv} id={id} />
                   </div>

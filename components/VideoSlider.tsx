@@ -12,8 +12,10 @@ type SliderProps = {
 };
 
 const VideoSlider = ({ dv, id }: SliderProps) => {
+  const [size, setSize] = useState(0);
   const fetchList = async () => {
     const { results } = await (await fetch(`/api/${dv}/${id}/videos`)).json();
+    setSize(results.length);
     return results;
   };
   const { data, status }: UseQueryResult<Video[], Error> = useQuery(
@@ -86,85 +88,88 @@ const VideoSlider = ({ dv, id }: SliderProps) => {
   };
 
   return (
-    <div className="slider_bg">
-      <div className="slider_wrap">
-        {status === "success" ? (
-          <Slider {...settings}>
-            {data &&
-              data.map((video: Video) => (
-                <div className="video_wrap" key={video.id}>
-                  <YouTube
-                    key={video.id}
-                    videoId={video.key}
-                    opts={{ ...video_opts }}
-                    onEnd={(e) => {
-                      e.target.stopVideo(0);
-                    }}
-                  />
-                </div>
-              ))}
-          </Slider>
-        ) : null}
-      </div>
-      <style jsx global>
-        {`
-          .slider_wrap {
-            overflow: visible;
-            position: relative;
-            width: calc(100vw - 8vw - 24px);
-          }
-          .slick-list {
-            overflow: visible;
-          }
-          .slick-track {
-            margin-left: 0;
-          }
-          .slick-slide {
-            padding: 0 30px 0 0;
-          }
-          .video_wrap {
-            position: relative;
-            padding-bottom: 56%;
-            max-width: 550px;
-          }
-          iframe {
-            position: absolute;
-            width: 100% !important;
-            height: 100% !important;
-          }
-          .slick-next {
-            right: 0;
-            transform: translateX(90%);
-          }
-          .slick-prev {
-            left: 0;
-            transform: translateX(-95%);
-          }
-          .slick-prev,
-          .slick-next {
-            top: 0;
-            width: calc(3.5vw + 24px);
-            height: 100%;
-            z-index: 100;
-          }
-          .slick-prev.slick-disabled:before,
-          .slick-next.slick-disabled:before {
-            opacity: 0;
-          }
-          .slick-prev:before,
-          .slick-next:before {
-            font-size: 30px;
-            opacity: 0.3;
-            transition: opacity 0.2s ease-in-out;
-          }
-          @media (max-width: 640px) {
-            .slick-next {
-              margin-right: 15px;
+    <>
+      {size > 0 && <h2>Teaser</h2>}
+      <div className="slider_bg">
+        <div className="slider_wrap">
+          {status === "success" ? (
+            <Slider {...settings}>
+              {data &&
+                data.map((video: Video) => (
+                  <div className="video_wrap" key={video.id}>
+                    <YouTube
+                      key={video.id}
+                      videoId={video.key}
+                      opts={{ ...video_opts }}
+                      onEnd={(e) => {
+                        e.target.stopVideo(0);
+                      }}
+                    />
+                  </div>
+                ))}
+            </Slider>
+          ) : null}
+        </div>
+        <style jsx global>
+          {`
+            .slider_wrap {
+              overflow: visible;
+              position: relative;
+              width: calc(100vw - 8vw - 24px);
             }
-          }
-        `}
-      </style>
-    </div>
+            .slick-list {
+              overflow: visible;
+            }
+            .slick-track {
+              margin-left: 0;
+            }
+            .slick-slide {
+              padding: 0 30px 0 0;
+            }
+            .video_wrap {
+              position: relative;
+              padding-bottom: 56%;
+              max-width: 550px;
+            }
+            iframe {
+              position: absolute;
+              width: 100% !important;
+              height: 100% !important;
+            }
+            .slick-next {
+              right: 0;
+              transform: translateX(90%);
+            }
+            .slick-prev {
+              left: 0;
+              transform: translateX(-95%);
+            }
+            .slick-prev,
+            .slick-next {
+              top: 0;
+              width: calc(3.5vw + 24px);
+              height: 100%;
+              z-index: 100;
+            }
+            .slick-prev.slick-disabled:before,
+            .slick-next.slick-disabled:before {
+              opacity: 0;
+            }
+            .slick-prev:before,
+            .slick-next:before {
+              font-size: 30px;
+              opacity: 0.3;
+              transition: opacity 0.2s ease-in-out;
+            }
+            @media (max-width: 640px) {
+              .slick-next {
+                margin-right: 15px;
+              }
+            }
+          `}
+        </style>
+      </div>
+    </>
   );
 };
 

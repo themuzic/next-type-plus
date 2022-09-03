@@ -47,12 +47,16 @@ export default function Detail(): JSX.Element {
               </div>
 
               <div className="movie_section">
-                <div className="poster_wrap">
-                  <img
-                    src={`http://image.tmdb.org/t/p/w300${tv.poster_path}`}
-                    className="poster"
-                  />
-                </div>
+                {tv.poster_path && (
+                  <>
+                    <div className="poster_wrap">
+                      <img
+                        src={`http://image.tmdb.org/t/p/w300${tv.poster_path}`}
+                        className="poster"
+                      />
+                    </div>
+                  </>
+                )}
                 <div className="info">
                   {company && company.logo_path && (
                     <img
@@ -72,19 +76,20 @@ export default function Detail(): JSX.Element {
                         <span>시즌 {tv.number_of_seasons}</span>
                       </>
                     )}
-
-                    <span>·</span>
-                    {tv.genres &&
-                      tv.genres.map((genre) => (
-                        <span key={genre.id}>{genre.name}</span>
-                      ))}
+                    {tv.genres && (
+                      <>
+                        <span>·</span>
+                        {tv.genres.map((genre) => (
+                          <span key={genre.id}>{genre.name}</span>
+                        ))}
+                      </>
+                    )}
                   </div>
-                  <div className="desc">{tv.overview}</div>
+                  {tv.overview && <div className="desc">{tv.overview}</div>}
                 </div>
               </div>
               {id && (
                 <div className="video_section">
-                  <h2>Teaser</h2>
                   <div>
                     <VideoSliderNoSSR dv={dv} id={id} />
                   </div>
