@@ -4,7 +4,7 @@ import "node_modules/slick-carousel/slick/slick.css";
 import "node_modules/slick-carousel/slick/slick-theme.css";
 import { useRouter } from "next/router";
 import { Content } from "pages";
-import { useQuery } from "react-query";
+import { useQuery, UseQueryResult } from "react-query";
 
 type SliderProps = {
   dv: string;
@@ -16,9 +16,13 @@ const ManualSlider = ({ dv, type }: SliderProps) => {
     const { results } = await (await fetch(`/api/${dv}/${type}`)).json();
     return results;
   };
-  const { data, status } = useQuery(`${dv}.${type}`, fetchList, {
-    keepPreviousData: true,
-  });
+  const { data, status }: UseQueryResult<Content[], Error> = useQuery(
+    `${dv}.${type}`,
+    fetchList,
+    {
+      keepPreviousData: true,
+    }
+  );
 
   const [dragging, setDragging] = useState(false);
   const router = useRouter();
@@ -102,22 +106,23 @@ const ManualSlider = ({ dv, type }: SliderProps) => {
       <div className="slider_wrap">
         {status === "success" ? (
           <Slider {...settings}>
-            {data.map(
-              (obj: Content) =>
-                obj.poster_path !== null && (
-                  <div
-                    className="movie_wrap"
-                    key={obj.id}
-                    onClick={(event) => onClick(event, obj)}
-                  >
-                    <div className="movie">
-                      <img
-                        src={`http://image.tmdb.org/t/p/w500${obj.poster_path}`}
-                      />
+            {data &&
+              data.map(
+                (obj: Content) =>
+                  obj.poster_path !== null && (
+                    <div
+                      className="movie_wrap"
+                      key={obj.id}
+                      onClick={(event) => onClick(event, obj)}
+                    >
+                      <div className="movie">
+                        <img
+                          src={`http://image.tmdb.org/t/p/w500${obj.poster_path}`}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )
-            )}
+                  )
+              )}
           </Slider>
         ) : null}
       </div>

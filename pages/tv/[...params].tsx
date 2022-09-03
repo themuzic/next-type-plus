@@ -2,39 +2,34 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Seo from "components/Seo";
 import dynamic from "next/dynamic";
-import VideoSlider from "components/VideoSlider";
-import { Company, Tv, Genre, Video } from "pages";
+import { Company, Tv } from "pages";
 
 export default function Detail(): JSX.Element {
-  // const VideoSliderNoSSR = dynamic(() => import("components/VideoSlider"), {
-  //   ssr: false,
-  // });
+  const VideoSliderNoSSR = dynamic(() => import("components/VideoSlider"), {
+    ssr: false,
+  });
   const [tv, setTv] = useState<Tv>();
-  const [videos, setVideos] = useState<Video[]>();
+  const [id, setId] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [company, setCompany] = useState<Company>();
   const router = useRouter();
+  const dv = "tv";
 
   useEffect(() => {
     if (router.query.params !== undefined) {
       const param = router.query.params;
-      setTitle(param[0]);
       if (param) {
+        setTitle(param[0]);
+        setId(param[1]);
         (async () => {
-          const response = await (await fetch(`/api/tv/${param[1]}`)).json();
+          const response = await (await fetch(`/api/${dv}/${id}`)).json();
           setTv(response);
           if (response.production_companies)
             setCompany(response.production_companies[0]);
         })();
-        (async () => {
-          const { results } = await (
-            await fetch(`/api/tv/${param[1]}/videos`)
-          ).json();
-          setVideos(results);
-        })();
       }
     }
-  }, [router.query.params]);
+  }, [router.query.params, id]);
 
   return (
     <>
@@ -87,11 +82,11 @@ export default function Detail(): JSX.Element {
                   <div className="desc">{tv.overview}</div>
                 </div>
               </div>
-              {videos && videos.length > 0 && (
+              {id && (
                 <div className="video_section">
                   <h2>Teaser</h2>
                   <div>
-                    <VideoSlider list={videos} />
+                    <VideoSliderNoSSR dv={dv} id={id} />
                   </div>
                 </div>
               )}

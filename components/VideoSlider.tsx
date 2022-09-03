@@ -4,12 +4,26 @@ import YouTube from "react-youtube";
 import "node_modules/slick-carousel/slick/slick.css";
 import "node_modules/slick-carousel/slick/slick-theme.css";
 import { Video } from "pages";
+import { useQuery, UseQueryResult } from "react-query";
 
 type SliderProps = {
-  list: Array<Video>,
-}
+  dv: string;
+  id: string;
+};
 
-const VideoSlider = ({ list }: SliderProps) => {
+const VideoSlider = ({ dv, id }: SliderProps) => {
+  const fetchList = async () => {
+    const { results } = await (await fetch(`/api/${dv}/${id}/videos`)).json();
+    return results;
+  };
+  const { data, status }: UseQueryResult<Video[], Error> = useQuery(
+    `${dv}.${id}`,
+    fetchList,
+    {
+      keepPreviousData: true,
+    }
+  );
+
   const [dragging, setDragging] = useState(false);
 
   const handleBeforeChange = useCallback(() => {
@@ -20,7 +34,7 @@ const VideoSlider = ({ list }: SliderProps) => {
     setDragging(false);
   }, [setDragging]);
 
-  const onClick = (e:React.ChangeEvent<HTMLDivElement>):void => {
+  const onClick = (e: React.ChangeEvent<HTMLDivElement>): void => {
     if (dragging) {
       e.stopPropagation();
       return;
@@ -74,20 +88,23 @@ const VideoSlider = ({ list }: SliderProps) => {
   return (
     <div className="slider_bg">
       <div className="slider_wrap">
-        <Slider {...settings}>
-          {list.map((video) => (
-            <div className="video_wrap" key={video.id}>
-              <YouTube
-                key={video.id}
-                videoId={video.key}
-                opts={{ ...video_opts }}
-                onEnd={(e) => {
-                  e.target.stopVideo(0);
-                }}
-              />
-            </div>
-          ))}
-        </Slider>
+        {status === "success" ? (
+          <Slider {...settings}>
+            {data &&
+              data.map((video: Video) => (
+                <div className="video_wrap" key={video.id}>
+                  <YouTube
+                    key={video.id}
+                    videoId={video.key}
+                    opts={{ ...video_opts }}
+                    onEnd={(e) => {
+                      e.target.stopVideo(0);
+                    }}
+                  />
+                </div>
+              ))}
+          </Slider>
+        ) : null}
       </div>
       <style jsx global>
         {`

@@ -30,7 +30,7 @@ export interface Tv {
   original_name: string | undefined;
   title: string;
   overview: string;
-  genres: Array<Genre> | undefined;
+  genres: Array<Genre>;
   first_air_date: string;
   number_of_seasons: string;
 }

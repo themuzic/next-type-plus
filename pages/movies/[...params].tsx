@@ -2,40 +2,34 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Seo from "components/Seo";
 import dynamic from "next/dynamic";
-import VideoSlider from "components/VideoSlider";
-import { Company, Movie, Genre, Video } from "pages";
+import { Company, Movie } from "pages";
 
 export default function Detail(): JSX.Element {
-  // const VideoSliderNoSSR = dynamic(() => import("components/VideoSlider"), {
-  //   ssr: false,
-  // });
+  const VideoSliderNoSSR = dynamic(() => import("components/VideoSlider"), {
+    ssr: false,
+  });
   const [movie, setMovie] = useState<Movie>();
-  const [videos, setVideos] = useState<Video[]>();
+  const [id, setId] = useState<string>();
   const [title, setTitle] = useState<string>();
   const [company, setCompany] = useState<Company>();
   const router = useRouter();
+  const dv = "movies";
 
   useEffect(() => {
     if (router.query.params !== undefined) {
       const param = router.query.params;
-      setTitle(param[0]);
       if (param) {
+        setTitle(param[0]);
+        setId(param[1]);
         (async () => {
-          const response = await (
-            await fetch(`/api/movies/${param[1]}`)
-          ).json();
+          const response = await (await fetch(`/api/${dv}/${id}`)).json();
           setMovie(response);
-          setCompany(response.production_companies[0]);
-        })();
-        (async () => {
-          const { results } = await (
-            await fetch(`/api/movies/${param[1]}/videos`)
-          ).json();
-          setVideos(results);
+          if (response.production_companies)
+            setCompany(response.production_companies[0]);
         })();
       }
     }
-  }, [router.query.params]);
+  }, [router.query.params, id]);
 
   return (
     <>
@@ -68,22 +62,25 @@ export default function Detail(): JSX.Element {
                   )}
                   <h2 className="title">{movie.title}</h2>
                   <div className="genres">
-                    <span>{movie.release_date.substring(0, 4)}</span>
+                    <span>
+                      {movie.release_date && movie.release_date.substring(0, 4)}
+                    </span>
                     <span>·</span>
                     <span>{movie.runtime}분</span>
                     <span>·</span>
-                    {movie.genres.map((genre, idx) => (
-                      <span key={genre.id}>{genre.name}</span>
-                    ))}
+                    {movie.genres &&
+                      movie.genres.map((genre) => (
+                        <span key={genre.id}>{genre.name}</span>
+                      ))}
                   </div>
                   <div className="desc">{movie.overview}</div>
                 </div>
               </div>
-              {videos && videos.length > 0 && (
+              {id && (
                 <div className="video_section">
                   <h2>Teaser</h2>
                   <div>
-                    <VideoSlider list={videos} />
+                    <VideoSliderNoSSR dv={dv} id={id} />
                   </div>
                 </div>
               )}
